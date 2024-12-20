@@ -1,5 +1,5 @@
 {
-	"name": "teacherapp",
+	"name": "bondly",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"@libsql/client": "^0.9.0",
+		"bcryptjs": "^2.4.3",
 		"drizzle-orm": "^0.33.0"
 	}
 }
