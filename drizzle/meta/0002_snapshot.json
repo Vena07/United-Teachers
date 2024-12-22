@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "95121244-479a-44ae-b03c-065b1d9abf87",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c2d5abde-8362-44cf-859b-fe5db0004241",
+  "prevId": "fa46698c-024d-4f79-888d-fc84154a1c1f",
   "tables": {
     "posts": {
       "name": "posts",
@@ -34,7 +34,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-12-22T21:38:52.145Z\"'"
+          "default": "'\"2024-12-22T21:50:05.109Z\"'"
         },
         "photo_url": {
           "name": "photo_url",
@@ -73,7 +73,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "posts_author_id_user_id_fk": {
+          "name": "posts_author_id_user_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -103,7 +117,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "ratings_user_id_user_id_fk": {
+          "name": "ratings_user_id_user_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ratings_post_id_posts_id_fk": {
+          "name": "ratings_post_id_posts_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },

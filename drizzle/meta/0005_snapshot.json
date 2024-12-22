@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "95121244-479a-44ae-b03c-065b1d9abf87",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "f84a9c60-44de-4600-b1f1-6702e3c56df7",
+  "prevId": "5a68b759-64a8-498e-b2e0-e07b37f73c29",
   "tables": {
     "posts": {
       "name": "posts",
@@ -21,8 +21,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "banner": {
-          "name": "banner",
+        "subject_banner": {
+          "name": "subject_banner",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "freeware_banner": {
+          "name": "freeware_banner",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -34,7 +41,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-12-22T21:38:52.145Z\"'"
+          "default": "'\"2024-12-22T21:52:59.821Z\"'"
         },
         "photo_url": {
           "name": "photo_url",
@@ -73,7 +80,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "posts_author_id_user_id_fk": {
+          "name": "posts_author_id_user_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -103,7 +124,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "ratings_user_id_user_id_fk": {
+          "name": "ratings_user_id_user_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ratings_post_id_posts_id_fk": {
+          "name": "ratings_post_id_posts_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
