@@ -30,7 +30,7 @@ export const posts = sqliteTable("posts", {
     author_id: integer("author_id").notNull().references(() => user.id),
     description: text("description").notNull(),
     installation_links: text("installation_links"),
-    didactic_links: text("didactic_links"),
+    didactic_links: text("didactic_links"), 
 });
 
 // Tabulka pro hodnocení
