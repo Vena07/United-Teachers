@@ -22,21 +22,19 @@
 				body: formData,
 			});
 
+			const result = await response.json();
+
 			if (response.ok) {
-				const result = await response.json();
 				if (result.success) {
 					loginSuccess = true;
 					setTimeout(() => {
 						goto('/profile');
 					}, 1000);
-				} else if (result.message === 'Please verify your email before logging in.') {
-					notification = 'The email has not been verified yet. Please verify it before logging in.';
 				} else {
 					notification = result.message;
 				}
 			} else {
-				const errorResult = await response.json();
-				notification = errorResult.message;
+				notification = result.message || 'An unexpected error occurred. Please try again later.';
 			}
 		} catch (error) {
 			notification = 'An unexpected error occurred. Please try again later.';
@@ -45,7 +43,7 @@
 	}
 </script>
 
-<form on:submit={login} >
+<form on:submit={login}>
 	<h1>LOGIN</h1>
 	<label>
 		Nick
@@ -62,7 +60,7 @@
 	<button type="submit"><strong>Přihlásit se</strong></button>
 	<div>
 		<a href="/register">Nová registrace</a>
-		<a href="/login/frogot-password">Zapomenuté heslo</a>
+		<a href="/login/forgot-password">Zapomenuté heslo</a>
 	</div>
 </form>
 

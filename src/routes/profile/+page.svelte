@@ -30,5 +30,6 @@
         <div>
             <p>{user.nickname}<br> {vek} Let</p>
         </div>
+        <a href="/postmaker">Vytvořit přísěvek</a>
 </div>
 
