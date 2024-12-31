@@ -1,23 +1,36 @@
-// api/data.ts
-import { db } from '$lib/server/db';
-import { user} from '$lib/server/db/schema';
+import { db } from '$lib/server/db';  // Importuješ svou databázovou logiku
+import { user, posts, ratings } from '$lib/server/db/schema'; 
+
+const allowedTables = ['user', 'posts', 'ratings']; // seznam povolených tabulek
 
 export async function GET({ url }) {
     const table = url.searchParams.get('table');
     let data;
+
+    if (!table) {
+        return new Response(JSON.stringify({ error: 'Parametr "table" je povinný.' }), { status: 400 });
+    }
 
     try {
         switch (table) {
             case 'user':
                 data = await db.select().from(user);
                 break;
+            case 'posts':
+                data = await db.select().from(posts);
+                break;
+            case 'ratings':
+                data = await db.select().from(ratings);
+                break;
             default:
-                return new Response(JSON.stringify({ error: 'Nenašla se tabulka' }), { status: 400 });
+                return new Response(JSON.stringify({ error: `Tabulka "${table}" neexistuje.` }), { status: 400 });
         }
 
+        console.log('API data:', data);  // Logování dat
         return new Response(JSON.stringify(data), { status: 200 });
 
     } catch (error) {
-        return new Response(JSON.stringify({ error: 'Vyskitla se chyb při načítaní tabulek: ',data }), { status: 500 });
+        console.error('Chyba při načítání dat:', error);
+        return new Response(JSON.stringify({ error: `Došlo k chybě při načítání tabulky "${table}".` }), { status: 500 });
     }
 }
