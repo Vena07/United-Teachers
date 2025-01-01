@@ -11,7 +11,7 @@ export async function GET({ params }) {
     .select()
     .from(posts)
     .where(eq(posts.id, id))
-    .get();
+    .get(); // Načte jeden příspěvek
 
   if (!post) {
     return new Response(
