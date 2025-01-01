@@ -2,20 +2,30 @@
     import { goto } from '$app/navigation';
 
     let title = '';
-    let subjectBanner = '';
-    let freewareBanner = '';
+    let subjectBanner = '';  // Volitelný subject banner
+    let freewareBanner = '';  // Volitelný freeware banner (nyní platforma)
     let photoUrl = '';
     let description = '';
     let installationLinks = '';
     let didacticLinks = '';
     let notification = '';
 
+    // Předdefinované možnosti pro subjectBanner
+    const subjectBannerOptions = [
+        'Science', 'Math', 'History', 'Literature', 'Technology'
+    ];
+
+    // Předdefinované možnosti pro freewareBanner (platformy)
+    const freewareBannerOptions = [
+        'Windows', 'Mac', 'Linux', 'Other'
+    ];
+
     async function createPost(event) {
         event.preventDefault();
         notification = '';
 
         // Validace povinných polí
-        if (!title || !subjectBanner || !freewareBanner || !description || !installationLinks) {
+        if (!title || !description || !installationLinks) {
             notification = 'Please fill in all required fields.';
             return;
         }
@@ -27,7 +37,7 @@
                 body: JSON.stringify({
                     title,
                     subjectBanner,
-                    freewareBanner,
+                    freewareBanner, // Nyní platforma místo URL
                     photoUrl,
                     description,
                     installationLinks,
@@ -59,13 +69,23 @@
     </label>
 
     <label>
-        Subject Banner (Required)
-        <input type="text" bind:value={subjectBanner} required />
+        Subject Banner (Optional)
+        <select bind:value={subjectBanner}>
+            <option value="">Select a subject</option>
+            {#each subjectBannerOptions as option}
+                <option value={option}>{option}</option>
+            {/each}
+        </select>
     </label>
 
     <label>
-        Freeware Banner (Required)
-        <input type="text" bind:value={freewareBanner} required />
+        Platform (Optional)
+        <select bind:value={freewareBanner}>
+            <option value="">Select a platform</option>
+            {#each freewareBannerOptions as option}
+                <option value={option}>{option}</option>
+            {/each}
+        </select>
     </label>
 
     <label>
