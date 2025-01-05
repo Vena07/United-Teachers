@@ -33,6 +33,7 @@
         </div>
         <a href="/postmaker">Vytvořit přísěvek</a>
         <a href="/myposts">Vaše příspěvky</a>
+        <a href="/notifikace">Notifikace</a>
 
 </div>
 

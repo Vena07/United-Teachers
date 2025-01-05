@@ -1,7 +1,7 @@
-import { db } from '$lib/server/db';  // Importuješ svou databázovou logiku
-import { user, posts, ratings } from '$lib/server/db/schema'; 
+import { db } from '$lib/server/db';
+import { user, posts, ratings, notifications } from '$lib/server/db/schema';
 
-const allowedTables = ['user', 'posts', 'ratings']; // seznam povolených tabulek
+const allowedTables = ['user', 'posts', 'ratings', 'notifications']; // Přidáno 'notifications'
 
 export async function GET({ url }) {
     const table = url.searchParams.get('table');
@@ -22,11 +22,17 @@ export async function GET({ url }) {
             case 'ratings':
                 data = await db.select().from(ratings);
                 break;
+            case 'notifications': // Přidán case pro 'notifications'
+                data = await db.select().from(notifications);
+                break;
+            case 'reports': // Přidán case pro 'notifications'
+                data = await db.select().from(reports);
+                break;
             default:
                 return new Response(JSON.stringify({ error: `Tabulka "${table}" neexistuje.` }), { status: 400 });
         }
 
-        console.log('API data:', data);  // Logování dat
+        console.log('API data:', data);
         return new Response(JSON.stringify(data), { status: 200 });
 
     } catch (error) {

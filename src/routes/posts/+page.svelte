@@ -5,6 +5,10 @@
     const postsPerPage = 2;  // Počet příspěvků na stránku
     let selectedPost = $state(null);  // Vybraný příspěvek
 
+    let isReporting = $state(false);  // Stav pro zobrazení formuláře pro nahlášení
+    let reportReason = $state('');    // Důvod nahlášení
+    let selectedPostForReport = $state(null);  // Vybraný příspěvek pro nahlášení
+
     // Funkce pro načítání dat z API
     const loadData = async (table) => {
         try {
@@ -23,7 +27,7 @@
 
     // Načítání dat pomocí $effect
     $effect(() => {
-        loadData('posts').then((data) => postss = data);
+        loadData('posts').then((data) => postss = data.filter(post => post.active === 1));  // Filtr na aktivní příspěvky
         loadData('user').then((data) => users = data);
     });
 
@@ -63,6 +67,48 @@
         const endIndex = startIndex + postsPerPage;
         return postss.slice(startIndex, endIndex);
     }
+
+    // Funkce pro odeslání nahlášení
+    async function submitReport() {
+        const cookies = document.cookie;
+        const userId = cookies.match(/session=([0-9]+)/)?.[1];  // Získání ID uživatele z cookies
+
+        // Validace, zda je vyplněný důvod
+        if (!reportReason.trim()) {
+            alert('Prosím zadejte důvod nahlášení.');
+            return;
+        }
+
+        // Odeslání požadavku na server bez validace
+        const response = await fetch('/posts', {
+            method: 'POST',
+            body: JSON.stringify({
+                postId: selectedPostForReport.id,
+                reason: reportReason,
+                reporterId: userId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Příspěvek byl úspěšně nahlášen.');
+        } else {
+            alert('Došlo k chybě při odesílání nahlášení.');
+        }
+
+        cancelReport();
+    }
+
+    // Funkce pro zrušení nahlášení
+    function cancelReport() {
+        isReporting = false;
+        reportReason = '';
+        selectedPostForReport = null;
+    }
 </script>
 
 <h1>Příspěvky</h1>
@@ -72,7 +118,7 @@
     <div>
         <button onclick={hidePostDetail}>Zpět na seznam</button>
         <h2>{selectedPost.title}</h2>
-        <p><strong>Autor:</strong> {getAuthorNickname(selectedPost.author_id)}</p>
+        <p><strong>Autor:</strong> {getAuthorNickname(selectedPost.author_id)}</p> <!-- Autor -->
         <p><strong>Datum zveřejnění:</strong> {new Date(selectedPost.published_at).toLocaleDateString()}</p>
 
         <p><strong>Freeware banner:</strong></p>
@@ -104,13 +150,26 @@
         {:else}
             <p>Didaktické odkazy nejsou přidány</p>
         {/if}
+
+        <!-- Formulář pro nahlášení -->
+        {#if isReporting}
+            <div>
+                <h3>Nahlásit příspěvek</h3>
+                <textarea bind:value={reportReason} placeholder="Důvod nahlášení"></textarea>
+                <button onclick={submitReport}>Odeslat nahlášení</button>
+                <button onclick={cancelReport}>Zrušit</button>
+            </div>
+        {/if}
+
+        <!-- Tlačítko pro nahlášení -->
+        <button onclick={() => { isReporting = true; selectedPostForReport = selectedPost; }}>Nahlásit příspěvek</button>
     </div>
 {:else}
     <!-- Seznam příspěvků pro aktuální stránku -->
     {#each getCurrentPosts() as post}
         <div>
             <h2>{post.title}</h2>
-            <p><strong>Autor:</strong> {getAuthorNickname(post.author_id)}</p>
+            <p><strong>Autor:</strong> {getAuthorNickname(post.author_id)}</p> <!-- Autor -->
             <p><strong>Datum zveřejnění:</strong> {new Date(post.published_at).toLocaleDateString()}</p>
 
             <p><strong>Freeware banner:</strong></p>
