@@ -16,8 +16,8 @@
 </script>
 <header>
     <div class="container">
-       
       <!-- Hamburger Button -->
+       <img src="/favicon.png" alt="">
         <button
             class="hamburger"
             onclick={() => (isMenuOpen = !isMenuOpen)}
@@ -41,52 +41,56 @@
 </header>
 
 <style lang="scss">
-    header {
+header {
     height: 100px;
     margin: 0;
     padding: 0;
-    
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
         .container {
             max-width: 1300px;
+            width:  100%;
             margin: auto;
             display: flex;
             justify-content: space-between;
             height: 100px;
             align-items: center;
 
-            .img{
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-content: center;
-
-            
+            img{
+                height: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                align-content: center;
             }
         }
     }
 
     .hamburger {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: relative;
-    z-index: 50;
-    margin-right: 35px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        z-index: 50;
+        margin-right: 35px;
 
         .line {
             width: 30px;
-            height: 3px;
+            height: 2px;
             border-radius: 30px;
             background-color: #333;
             transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 
             &.top.isOpen {
-            transform: translateY(12px) rotate(120deg);
-            background-color: #fddcff;
+                transform: translateY(9px) rotate(120deg);
+                background-color: #edabf0;
             }
 
             &.middle.isOpen {
@@ -95,7 +99,7 @@
             }
 
             &.bottom.isOpen {
-            transform: translateY(-6px) translateX(-0px) rotate(-120deg);
+            transform: translateY(-6px) translateX(-20px) rotate(-120deg);
             }
         }
     }
