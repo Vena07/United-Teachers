@@ -29,7 +29,8 @@ export async function load({ locals }) {
         id: User1.id,
         nickname: User1.nickname,
         datum_nar: User1.datum_nar,
-        profile_image: User1.profile_image
+        profile_image: User1.profile_image,
+        admin: User1.admin
       }
     }
   };

@@ -5,27 +5,36 @@ import { eq } from 'drizzle-orm';
 
 export async function handle({ event, resolve }) {
   const cookie = event.request.headers.get('cookie');
-  console.log("Received cookie:", cookie);  // Logování obdrženého cookie
+  console.log("Received cookie:", cookie);  // Logování přijatých cookies
 
   if (cookie) {
     const { session } = parse(cookie);
-    console.log("Session ID from cookie:", session);  // Logování session ID
+    console.log("Session ID from cookie:", session);  // Logování session ID z cookie
 
     if (session) {
-      const user1 = await db.select().from(user).where(eq(user.id, parseInt(session))).get();
-      console.log("User from database:", user1);  // Logování načteného uživatele z DB
+      // Ověření, že session je platné číslo
+      const sessionId = parseInt(session);
+      console.log("Parsed session ID:", sessionId);  // Logování čísla session ID
 
-      if (user1) {
-        event.locals.user1 = user1;
-        console.log('User found:', user1); // Logování při úspěšném nastavení user1
+      if (!isNaN(sessionId)) {
+        // Načítání uživatele podle session ID
+        const user1 = await db.select().from(user).where(eq(user.id, sessionId)).get();
+        console.log("User from database:", user1);  // Logování načteného uživatele z DB
+
+        if (user1) {
+          event.locals.user1 = user1;
+          console.log('User found and set in locals:', user1);  // Logování uživatele v locals
+        } else {
+          console.log('User not found with ID:', sessionId);  // Logování při nenalezení uživatele
+        }
       } else {
-        console.log('User not found');
+        console.log('Session ID is not a valid number');  // Logování, že session ID není platné číslo
       }
     } else {
-      console.log('Session not found in cookie');
+      console.log('Session not found in cookie');  // Logování, že session není v cookie
     }
   } else {
-    console.log('Cookie not found');
+    console.log('Cookie not found');  // Logování, že cookie nebyla odeslána
   }
 
   return resolve(event);

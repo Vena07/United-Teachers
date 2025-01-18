@@ -1,58 +1,43 @@
 <script>
-    let notifications = [];
-    let currentPage = 1; // Aktuální stránka
-    const notificationsPerPage = 10; // Počet notifikací na stránku
+    import { onMount } from 'svelte';
 
-    async function loadNotifications() {
-        const response = await fetch('/api/data?table=notifications');
-        if (response.ok) {
-            notifications = await response.json();
-        } else {
-            console.error('Chyba při načítání notifikací:', await response.text());
+    let notifications = [];  // Pro uložení všech notifikací
+    let filteredNotifications = [];  // Pro uložení filtrovaných notifikací
+    let userId = 1;  // Toto získáme z cookies nebo session na serveru
+
+    // Načteme všechna data (notifikace) při načtení stránky
+    onMount(async () => {
+        try {
+            // Zavoláme API pro načtení všech notifikací
+            const response = await fetch('/api/data?table=notifications');
+            const data = await response.json();
+
+            // Pokud data nejsou prázdná, uložíme je do notifications
+            if (data && !data.error) {
+                notifications = data;
+
+                // Filtrování notifikací podle přihlášeného uživatele
+                filteredNotifications = notifications.filter(notification => notification.user_id === userId);
+            } else {
+                console.log('Chyba při načítání notifikací:', data.error);
+            }
+        } catch (error) {
+            console.log('Došlo k chybě při načítání notifikací:', error);
         }
-    }
-
-    // Funkce pro zobrazení notifikací na aktuální stránce
-    function getCurrentNotifications() {
-        const startIndex = (currentPage - 1) * notificationsPerPage;
-        const endIndex = startIndex + notificationsPerPage;
-        return notifications.slice(startIndex, endIndex);
-    }
-
-    // Přepnutí na předchozí stránku
-    function goToPreviousPage() {
-        if (currentPage > 1) {
-            currentPage -= 1;
-        }
-    }
-
-    // Přepnutí na další stránku
-    function goToNextPage() {
-        if (currentPage * notificationsPerPage < notifications.length) {
-            currentPage += 1;
-        }
-    }
-
-    $: loadNotifications(); // Načítání při načtení stránky
+    });
 </script>
 
-<h1>Notifikace</h1>
+<h1>Notifikace pro uživatele</h1>
 
-{#if notifications.length > 0}
+{#if filteredNotifications.length > 0}
     <ul>
-        {#each getCurrentNotifications() as notification}
+        {#each filteredNotifications as notification}
             <li>
                 <strong>Popis:</strong> {notification.description}<br />
                 <strong>Vytvořeno:</strong> {new Date(notification.created_at).toLocaleString()}
             </li>
         {/each}
     </ul>
-
-    <!-- Tlačítka pro stránkování -->
-    <div>
-        <button on:click={goToPreviousPage} disabled={currentPage === 1}>Předchozí</button>
-        <button on:click={goToNextPage} disabled={currentPage * notificationsPerPage >= notifications.length}>Další</button>
-    </div>
 {:else}
-    <p>Žádné notifikace nejsou k dispozici.</p>
+    <p>Žádné notifikace k dispozici.</p>
 {/if}

@@ -1,5 +1,11 @@
 <script>
     import { goto } from '$app/navigation';
+    export let user;
+
+    // Pokud uživatel není admin, přesměrujeme ho na domovskou stránku
+    if (user && user.admin !== 1) {
+        goto('/');  // Nebo jinou stránku podle potřeby
+    }
 </script>
 
 <h1>Admin Panel</h1>
