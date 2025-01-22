@@ -60,7 +60,7 @@
 	<button type="submit"><strong>Přihlásit se</strong></button>
 	<div>
 		<a href="/register">Nová registrace</a>
-		<a href="/login/forgot-password">Zapomenuté heslo</a>
+		<a href="/forgot-password">Zapomenuté heslo</a>
 	</div>
 </form>
 

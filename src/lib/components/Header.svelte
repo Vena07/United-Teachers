@@ -82,15 +82,15 @@ header {
         margin-right: 35px;
 
         .line {
-            width: 30px;
-            height: 2px;
+            width: 35px;
+            height: 3.5px;
             border-radius: 30px;
             background-color: #333;
             transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 
             &.top.isOpen {
-                transform: translateY(9px) rotate(120deg);
-                background-color: #edabf0;
+                transform: translateY(9px) rotate(-120deg);
+                background-color: #e1f1ff;
             }
 
             &.middle.isOpen {
@@ -99,7 +99,7 @@ header {
             }
 
             &.bottom.isOpen {
-            transform: translateY(-6px) translateX(-20px) rotate(-120deg);
+            transform: translateY(-6px) translateX(-10px) rotate(-120deg);
             }
         }
     }
@@ -124,7 +124,7 @@ header {
             opacity: 1;
             transform: scale(1);
             pointer-events: all;
-            background-color: #bc91c0;
+            background-color: #4d7892;
             z-index: 10;
         }
 
